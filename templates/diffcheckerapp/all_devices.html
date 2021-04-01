@@ -1,0 +1,39 @@
+{% extends 'diffcheckerapp/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Content start -->
+<div class="content-header">
+    <h1>
+        All Devices
+    </h1>
+    <br>
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Primary Device</th>
+            <th>Secondary Device</th>
+            <th>Download Report</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+         {% for qs in deveices_qs %}
+            <tr>
+            <td>{{qs.primary_interface.ip_address}}</td>
+            <td>{{qs.ip_address}}</td>
+            <td><a href="#">Scan Now</a></td>
+            <td> 
+              
+              <i class="fa fa-window-close" aria-hidden="true"></i>
+              
+          </td>
+          </tr>
+          {% endfor %}
+          
+        </tbody>
+      </table>
+   
+</div>
+<!-- end content -->
+{% endblock %}

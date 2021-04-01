@@ -1,0 +1,12 @@
+SystemDescription   Huawei FCoE-FC Gateway module 
+HostName            <undefined> 
+Eth1IPv4NetworkAddr 192.168.100.254 
+Eth1IPv6NetworkAddr fe80::2c0:ddff:fe24:21fe 
+MAC1Address         **:**:**:**:**:** 
+WorldWideName       10:00:00:c0:dd:24:21:fd 
+SerialNumber        2198080446DQCB46F882 
+SymbolicName        FCoE_GW 
+ActiveSWVersion     V9.8.0.10.0 
+ActiveTimestamp     Thur April 1 10:46:5 
+POSTStatus          Passed 
+SwitchMode          Full Fabric
