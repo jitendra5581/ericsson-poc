@@ -22,8 +22,12 @@
             <tr>
             <td>{{qs.primary_interface.ip_address}}</td>
             <td>{{qs.ip_address}}</td>
-            <td><a href="#">Scan Now</a></td>
-            <td> 
+            <td>
+            <span class="btn btn-primary">
+            <a class='scan-now' href="#">Scan Now</a>
+          </span>
+          </td>
+            <td class="status"> 
               
               <i class="fa fa-window-close" aria-hidden="true"></i>
               
@@ -33,7 +37,36 @@
           
         </tbody>
       </table>
-   
-</div>
+   </div>
 <!-- end content -->
+{% endblock %}
+
+{% block extrajs %}
+<script>
+$(document).ready(
+  function()
+  {
+  $('.scan-now').click(
+    function()
+    {
+var $row = $(this).closest("tr"); 
+$row.find(".status").html("<i class='fa fa-spinner fa-spin' aria-hidden='true' style='font-size:30px'></i>");
+
+
+$.ajax(
+  {
+   url: '../scanner',
+   success: function(result){
+    if(result=='done')
+    {
+      $row.find(".status").html("<i class='fa fa-download' aria-hidden='true'></i>")     
+
+    }
+   }
+  });
+
+    });
+  });
+
+</script>
 {% endblock %}

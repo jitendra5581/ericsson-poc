@@ -1,1 +1,2 @@
-.pyc
+*.pyc
+diffcheckerapp/__pycache__/*.pyc

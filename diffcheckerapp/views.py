@@ -3,6 +3,8 @@ from django.conf import settings
 import difflib
 import os
 import datetime
+import time
+from django.http import HttpResponse
 
 from .models import *
 
@@ -57,7 +59,7 @@ def scan_view(request):
         'secordary_device_logs' : file2,
         'primary_device_ip' : primary_device_ip,
         'sec_device_ip' : sec_device_ip
-
+ 
     }    
     return render(request, 'diffcheckerapp/diff.html', context)
 
@@ -68,3 +70,7 @@ def devices_view(request):
     }
     return render(request, 'diffcheckerapp/all_devices.html', context)
 
+def scanner_view(request):
+    time.sleep(10)
+    return HttpResponse('done')
+    

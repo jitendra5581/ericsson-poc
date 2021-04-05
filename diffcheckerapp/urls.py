@@ -4,5 +4,6 @@ from .views import *
 
 urlpatterns = [
     path('', scan_view),
-    path('devices/', devices_view)
+    path('devices/', devices_view),
+    path('scanner/', scanner_view)
 ]

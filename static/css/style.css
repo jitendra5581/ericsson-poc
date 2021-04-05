@@ -150,3 +150,25 @@ padding:30px;
 {
 color:red;
 }
+
+.scan-now
+{
+  color:#fff;
+}
+
+.scan-now:hover
+{
+  color:#fff;
+}
+
+.scan-now:visited
+{
+  color:#fff;
+}
+
+.fa-spin
+{
+  font-size: 40px;
+  color:red;
+}
+
