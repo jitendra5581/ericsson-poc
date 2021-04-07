@@ -5,11 +5,12 @@ from django.conf import settings
 import os
 
 
-command = 'show running'
+command = 'show run interface f0/0'
 
 class GenerateLogs:
     primary_log_file_path = ''
     secondary_log_file_path = '' 
+    
     def primary_log(self, device_type, ip_address, username, password, secret):
         session = ConnectHandler(
                                 device_type=device_type, 

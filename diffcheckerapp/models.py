@@ -7,7 +7,7 @@ class PrimaryInterface(models.Model):
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
     secret = models.CharField(max_length=50)
-    enable_monitoring = models.BooleanField()
+    enable_monitoring = models.BooleanField(default=True)
     
     def __str__(self):
         return self.ip_address
@@ -23,7 +23,7 @@ class SecondaryInterface(models.Model):
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
     secret = models.CharField(max_length=50)
-    enable_monitoring = models.BooleanField()
+    enable_monitoring = models.BooleanField(default=True)
 
     def get_primary_interface(self):
         return self.primary_interface.ip_address

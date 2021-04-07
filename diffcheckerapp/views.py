@@ -11,16 +11,10 @@ from utilities.switchlogs import *
 
 
 def get_diff(file1 , file2):
-    # file1_path = os.path.join(settings.LOGS_URL, file1)
-    # file2_path = os.path.join(settings.LOGS_URL, file2)
     file1_path = file1
     file2_path = file2
     file1_contents = open(file1_path, 'r').readlines()
     file2_contents = open(file2_path, 'r').readlines()
-    # compare = difflib.HtmlDiff().make_file(fromlines=file1, tolines=file2,
-    #                                            fromdesc=(datetime.date.today() - datetime.timedelta(
-    #                                                days=1)).isoformat(),
-    #                                            todesc=datetime.date.today().isoformat())
     compare = difflib.unified_diff(file1_contents, file2_contents)
     deleted_records = list()
     added_records = list()
@@ -31,12 +25,10 @@ def get_diff(file1 , file2):
         elif(comp[0]=='+' and len(comp)>10):
             added_records.append(comp)
             print(comp)
-
-    # print(compare)
-    return deleted_records, added_records, file1, file2
+    return deleted_records, added_records, file1_contents, file2_contents
 
 def scan_view(request):
-    qs = PrimaryInterface.objects.all()
+    prim__device_qs = PrimaryInterface.objects.all()
     deleted_records = list()
     added_records = list()
     file1 =''
@@ -49,14 +41,14 @@ def scan_view(request):
         print('pid>>', primary_device_id)
         qs = PrimaryInterface.objects.filter(id=primary_device_id)
 
-        #*********primary device details ***********
+        #*********primary device details *****************
         primary_device_ip = qs.first().ip_address
         prim_device_type = qs.first().device_type
         prim_username = qs.first().username
         prim_password = qs.first().password
         prim_secret = qs.first().secret
 
-        # ******************** logs scanner
+        # ******************** logs scanner ***************
         log_obj = GenerateLogs()
         primary_log_file_path = log_obj.primary_log(prim_device_type, 
                                     primary_device_ip, prim_username,
@@ -77,11 +69,11 @@ def scan_view(request):
                                     sec_password, sec_secret
                                     )
         
-        #deleted_records, added_records, file1, file2 = get_diff('device1.text', 'device2.txt')
-        deleted_records, added_records, file1, file2 = get_diff(primary_log_file_path, sec_log_file_path)
-    
+        deleted_records, added_records, file1, file2 = get_diff(primary_log_file_path, 
+                                                               sec_log_file_path
+                                                               )
     context = {
-        'device_objs' : qs,
+        'device_objs' : prim__device_qs,
         'deleted_records': deleted_records,
         'added_records': added_records,
         'primary_device_logs' : file1,

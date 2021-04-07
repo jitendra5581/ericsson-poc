@@ -82,14 +82,14 @@
         <div class="col-md-12">
         <div class="col-report" >
           {% if deleted_records %}  
-          <h4><b>Deleted Devices</b></h4>
+          <h4><b>Deleted Configurations </b></h4>
           {% for del_rec in deleted_records %}
           <p style='background: #F1948A;'> {{del_rec}}</p>
           {% endfor %}
           {% endif %}
 
           {% if added_records %}  
-          <h4><b>Added Devices</b></h4>
+          <h4><b>Added Configurations</b></h4>
           {% for added_rec in added_records %}
           <p style='background: #abf18a;'> {{added_rec}}</p>
           {% endfor %}

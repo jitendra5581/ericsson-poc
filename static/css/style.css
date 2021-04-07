@@ -130,9 +130,11 @@ width:100%;
 border: solid 2px aabbcc;
 margin-right:2px;
 background-color:#fff;
-height: 400px;
+/* height: auto; */
 border-radius: 10px;
 padding: 30px;
+max-height: 500px;
+overflow: auto;
 }
 
 .col-report

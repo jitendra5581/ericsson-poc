@@ -26,3 +26,4 @@ class SecondaryInterfaceAdmin(admin.ModelAdmin):
         model = SecondaryInterface
 
 admin.site.register(SecondaryInterface, SecondaryInterfaceAdmin)
+admin.site.site_header = 'Echelon Administration'

@@ -1,0 +1,13 @@
+
+Building configuration...
+
+Current configuration : 125 bytes
+!
+interface FastEthernet0/0
+ description *** Unused for Layer2 SW ***
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+end
+
