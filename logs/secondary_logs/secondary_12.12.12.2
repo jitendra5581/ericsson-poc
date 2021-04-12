@@ -1,0 +1,46 @@
+
+
+***************************************************************
+This is a normal Router with a SW module inside (NM-16ESW)
+It has been preconfigured with hard-code speed and duplex
+
+To create vlans use the command "vlan database" from exec mode
+After creating all desired vlans use "exit" to apply the config
+
+To view existing vlans use the command "show vlan-switch brief"
+
+Warning: You are using an old IOS image for this router.
+Please update the IOS to enable the "macro" command!
+***************************************************************
+
+
+DC-DC-SW4>terminal width 511
+DC-DC-SW4>terminal length 0
+DC-DC-SW4>
+DC-DC-SW4>
+DC-DC-SW4>
+DC-DC-SW4>
+DC-DC-SW4>
+DC-DC-SW4>
+DC-DC-SW4>enable
+Password: 
+DC-DC-SW4#
+DC-DC-SW4#
+DC-DC-SW4#
+DC-DC-SW4#
+DC-DC-SW4#
+DC-DC-SW4#
+DC-DC-SW4#show run interface f0/0
+Building configuration...
+
+Current configuration : 125 bytes
+!
+interface FastEthernet0/0
+ description *** Unused for Layer2 SW ***
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+end
+
+DC-DC-SW4#

@@ -31,42 +31,31 @@
         </div>
         <div class="col-md-6">
             <h3>&nbsp;</h3>
-            <input class="btn btn-primary" id='scan-now' type="submit" value="Scan Now">
+            <button type="button" class="btn btn-primary" id='scan-now' value="Scan Now">Scan Now</button>
         </div>
     </form>
     </div>
     <div class="row">
         <div class='col-md-6'>
-            <h3>
+            <h3 id='ip1'>
                 Primary Device Logs
                 <br>
-                {{primary_device_ip}}
             </h3>
             <br>
 
-            <div class="col1">
-                {% if primary_device_logs %}  
-          
-          {% for line  in primary_device_logs %}
-          <p> {{ line }}</p>
-          {% endfor %}
-          {% endif %}
+            <div id='prim_log' class="col1">
+               
             </div>
         </div>
         <div class='col-md-6'>
-            <h3>
+            <h3 id='ip2'>
                 Secondary Device Logs
                 <br>
-                {{sec_device_ip}}
+                
             </h3>
             <br>
-            <div class="col1">
-                {% if secordary_device_logs %}  
-          
-          {% for line  in secordary_device_logs %}
-          <p> {{ line }}</p>
-          {% endfor %}
-          {% endif %}
+            <div id='sec_log' class="col1">
+                
             </div>
         </div>
     </div>
@@ -80,20 +69,8 @@
     <div class="row">
 
         <div class="col-md-12">
-        <div class="col-report" >
-          {% if deleted_records %}  
-          <h4><b>Deleted Configurations </b></h4>
-          {% for del_rec in deleted_records %}
-          <p style='background: #F1948A;'> {{del_rec}}</p>
-          {% endfor %}
-          {% endif %}
-
-          {% if added_records %}  
-          <h4><b>Added Configurations</b></h4>
-          {% for added_rec in added_records %}
-          <p style='background: #abf18a;'> {{added_rec}}</p>
-          {% endfor %}
-          {% endif %}
+        <div id ='col-report' class="col-report" >
+         
         </div>
     </div>
     </div>
@@ -103,8 +80,9 @@
 {% endblock %}
 
 <!-- Ajax code for scanner button ---------->
-<!--
+
 {% block extrajs %}
+
 <script>
 $(document).ready(
   function()
@@ -112,6 +90,7 @@ $(document).ready(
   $('#scan-now').click(
     function()
     {
+$(this).html("<i style='color:#fff' class='fa fa-circle-o-notch fa-spin'></i>Loading");
 pri_device_id = $("#drp_primary").val();
 $.ajax(
   {
@@ -121,8 +100,46 @@ $.ajax(
      'primary_device': pri_device_id,
      "csrfmiddlewaretoken": '{{csrf_token}}'
    },
-   success: function(result){
-    console.log('success');
+   success: function(result)
+   {
+   if(result['status']=="done")
+   {
+    var primary_p = '';
+    var sec_p = '';   
+   $('#scan-now').html('Scan Now'); 
+
+   $('#ip1').html('Primary Device Logs<br>'+result['primary_ip']);
+   $('#ip2').html("Primary Device Logs<br>"+result['secondary_ip']);
+
+   $.each(result['primary_log'], function(i, value){
+       primary_p = primary_p + "<p>" + value + "</p>";
+      }); 
+    $('#prim_log').html(primary_p);
+
+    $.each(result['secondary_log'], function(i, value){
+        sec_p = sec_p + "<p>" + value + "</p>";
+    }); 
+    $('#sec_log').html(sec_p);
+    
+    var del_h = "<h4><b>Deleted Configurations </b></h4>";
+    var added_h = "<h4><b>Added Configurations</b></h4>";
+    var del_p = '';
+    var added_p = '';
+    var final_report ='';
+    
+    $.each(result['deleted_config'], function(i, value){
+        del_p = del_p + "<p style='background: #F1948A'>" + value + "</p>";
+      }); 
+
+    $.each(result['added_config'], function(i, value){
+    added_p = added_p + "<p style='background: #abf18a'>" + value + "</p>";
+    }); 
+
+    final_report = del_h + del_p + added_h + added_p;
+    $('#col-report').html(final_report);
+
+   }
+    
    }
   });
 
@@ -131,4 +148,3 @@ $.ajax(
 
 </script>
 {% endblock %}
--->

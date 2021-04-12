@@ -148,6 +148,22 @@ border-radius: 10px;
 padding:30px;
 }
 
+.col-report2
+{
+width:100%;
+border: solid 2px aabbcc;
+margin-right:2px;
+background-color:#fff;
+/* height: auto; */
+max-height: 500px;
+overflow: auto;
+border-radius: 10px;
+padding-left:30px;
+padding-right:30px;
+padding-bottom:30px;
+padding-top:0px;
+}
+
 .fa-window-close
 {
 color:red;
