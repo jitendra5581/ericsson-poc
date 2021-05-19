@@ -126,3 +126,5 @@ STATICFILES_DIRS = [
 
 LOGS_URL = os.path.join(BASE_DIR, 'logs')
 
+CSV_URL = os.path.join(BASE_DIR, 'uploaded_csv/')
+

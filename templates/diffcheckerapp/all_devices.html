@@ -8,23 +8,29 @@
         All Devices
     </h1>
     <br>
-    <table class="table table-hover">
+    <div style="height: 40px; padding-left: 9px;" id='bulk_scan_div' class="row">
+   <button type="button" id='bulk_scan' class="btn btn-primary"> Scan Selected Device</button>
+    </div>
+<div class="row">
+    <table id='device-table' class="table table-hover">
         <thead>
           <tr>
+            <th><input type="checkbox" id='check_all'  value='all_check'> Select All</th>
             <th>Primary Device</th>
             <th>Secondary Device</th>
-            <th>Download Report</th>
+            <th>Compare Configurations</th>
             <th>Status</th>
           </tr>
         </thead>
         <tbody>
          {% for qs in deveices_qs %}
             <tr>
+            <td><input type='checkbox' class="cb-device" value="{{ qs.primary_interface.ip_address }}"></td>  
             <td>{{qs.primary_interface.ip_address}}</td>
             <td>{{qs.ip_address}}</td>
             <td>
             <span class="btn btn-primary">
-            <a class='scan-now' href="#">Scan Now</a>
+            <a class='scan-now' href="#">Download Report</a>
           </span>
           </td>
             <td class="status"> 
@@ -37,6 +43,7 @@
           
         </tbody>
       </table>
+      </div>
 <!--------------code for modal popup --------------- -->  
 <!-- Button trigger modal -->
 <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
@@ -51,7 +58,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h3 style="text-align: center;" class="modal-title" id="exampleModalLongTitle">Modified Device Configurations Report</h3>
+        <h3 style="text-align: center;" class="modal-title" id="exampleModalLongTitle"> Device Configuration Comparison Report</h3>
         <h4 id='c_device' style="text-align: center; color:blue"></h4>
         <h4 id='scan-date' style="text-align: center; color:blue"></h4>
       </div>
@@ -59,13 +66,13 @@
         <div class="col-report2">
          
       <h3>
-        Deleted Configurations 
+        Missing Configurations in Secondary Device
       </h3>
       <div id='deleted-contents'>
        
       </div>
       <h3>
-        Added Configurations 
+        Additional Configurations in Secondary Device
       </h3>
       <div id='added-contents'>
       
@@ -88,13 +95,145 @@
 $(document).ready(
   function()
   {
-  $('.scan-now').click(
+ 
+    // *****************code to select/unselect devices **********
+$('#bulk_scan').attr("disabled", true);   
+$('#check_all').click(function(){
+  
+ is_checked = $('#check_all').is(':checked'); 
+//  is_any_checked = $('.cb-device').is(':checked');
+  $('.cb-device').prop( "checked", is_checked);
+  if(is_checked)
+  {
+    $('#bulk_scan').attr("disabled", false);
+  }
+  else
+  {
+    $('#bulk_scan').attr("disabled", true);
+    }
+  
+});
+
+$(".cb-device").change(function(){
+    if ($('.cb-device:checked').length>0)
+     {
+      $('#bulk_scan').attr("disabled", false);
+    }
+    else
+    {
+      $('#bulk_scan').attr("disabled", true);
+    }
+
+});
+
+//******************** bulk_scan button ***********************
+
+$('#bulk_scan').click(function(){
+  primary_ips = [];
+  secondary_ips = []; 
+  var device_table = $('#device-table');
+  tble_rows = [];
+  $('input:checkbox:gt(0):checked', device_table).each(function() {
+        primary_ips.push($(this).closest('tr').find('td:eq(1)').text());
+        secondary_ips.push($(this).closest('tr').find('td:eq(2)').text());
+        tble_rows.push($(this).closest("tr"));
+        }).get();
+        // console.log('primary>>>>', primary_ips);
+        // console.log('primary>>>>', secondary_ips);
+for(var i=0; i<primary_ips.length; i++)
+{        
+prim_ip = primary_ips[i] ;
+sec_ip = secondary_ips[i];
+var $row = tble_rows[i]; 
+print('selected ips>>>>', primary_ips);
+$row.find(".status").html("<i class='fa fa-spinner fa-spin' aria-hidden='true' style='font-size:30px'></i>");
+$.ajax(
+  {
+   url: '../scanner',
+   type: 'GET',
+   data: {
+     'primary_ip': prim_ip,
+     'secondary_ip' : sec_ip,
+     "csrfmiddlewaretoken": '{{csrf_token}}'
+  },
+   success: function(result){
+    console.log('testing>> ip:'+' '+prim_ip)
+    console.log('Response>>>>'+result['status']);
+    console.log('***************');
+    if(result['status']=='done')
+    {
+      
+      // $row.find(".status").html("<a data-toggle='modal' data-target='#exampleModalCenter'  href='#''> \
+      //   <i class='fa fa-download' aria-hidden='true'></i> \
+      //   </a>")   
+      // $row.find(".status").html("<a data-toggle='modal' data-target='#exampleModalCenter'  href='#''> \
+      //   <i class='fa fa-check' aria-hidden='true'></i> \
+      //   </a>")
+      var x = $row.find(".status").html("<i class='fa fa-check' aria-hidden='true'></i>");
+      // $row.find(".status").html(" <span style='color:red'><i class='fa fa-close' aria-hidden='true'></i> \
+      //   valid credentials</span>");
+      
+      // console.log('success>>>>>>', prim_ip);
+
+
+    // ******************** code to fillup reports ****************
+    // var c_devices = "Device: "+
+    //                  result['primary_ip']+
+    //                  "<i class='fa fa-arrows-h' aria-hidden='true'></i>"+
+    //                  result['secondary_ip'];
+    
+    // $('#c_device').html(c_devices);
+
+    // // *******time stamp*************
+    // var currentdate = new Date(); 
+    // var datetime = "Scanned At : " + currentdate.getDate() + "/"
+    //             + (currentdate.getMonth()+1)  + "/" 
+    //             + currentdate.getFullYear() + " @ "  
+    //             + currentdate.getHours() + ":"  
+    //             + currentdate.getMinutes() + ":" 
+    //             + currentdate.getSeconds();
+    // $('#scan-date').html(datetime); 
+    
+    // var delete_p = '';
+    // $.each(result['deleted_config'], function(i, value){
+    //    delete_p = delete_p + "<p style='background: #F1948A'>" + value + "</p>";
+    //   }); 
+    // $('#deleted-contents').html(delete_p);  
+     
+    // var added_p = '';
+    // $.each(result['added_config'], function(i, value){
+    //   added_p = added_p + "<p style='background: #abf18a'>" + value + "</p>";
+    //   }); 
+    // $('#added-contents').html(added_p);  
+    // $("#exampleModalCenter").modal('show');   
+
+    }
+    else if(result['status']=='failed')
+    {
+      $row.find(".status").html(" <span style='color:red'><i class='fa fa-close' aria-hidden='true'></i> \
+        Invalid IP or credentials</span>");
+
+      // console.log('failed>>>>>>', prim_ip);  
+
+    }
+   }
+  });     
+}
+});
+
+
+//*************************************************************
+
+
+
+// ********************code for scan button **************** 
+$('.scan-now').click(
     function()
     {
 var $row = $(this).closest("tr"); 
 $row.find(".status").html("<i class='fa fa-spinner fa-spin' aria-hidden='true' style='font-size:30px'></i>");
-prim_ip = $row.find('td:eq(0)').html();
-sec_ip = $row.find('td:eq(1)').html();
+prim_ip = $row.find('td:eq(1)').html();
+sec_ip = $row.find('td:eq(2)').html();
 $.ajax(
   {
    url: '../scanner',
@@ -146,6 +285,11 @@ $.ajax(
     $('#added-contents').html(added_p);  
     $("#exampleModalCenter").modal('show');   
 
+    }
+    else if(result['status']=='failed')
+    {
+      $row.find(".status").html(" <span style='color:red'><i class='fa fa-close' aria-hidden='true'></i> \
+        Invalid IP or credentials</span>");
     }
    }
   });

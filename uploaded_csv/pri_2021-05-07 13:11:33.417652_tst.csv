@@ -1,0 +1,3 @@
+,ip_address,device_type,username,password,secret,enable,upload_status,remarks
+0,1.1.1.1.84,cisco_ios,admin,cisco,cisco,True,success,
+1,1.1.1.1.85,cisco_ios,admin,cisco,cisco,True,success,

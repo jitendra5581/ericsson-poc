@@ -118,22 +118,28 @@ def scanner_view(request):
         sec_device_log_file_path = obj.config_scanner(sec_device_type,
                                      sec_ip, sec_username, sec_password, 
                                      sec_secret, 'secondary_interface')
-
-        del_conf, added_conf, p_log_cont, sec_log_cont = obj.get_difference(p_device_log_file_path, 
+        print('secondry_log>>>>>', sec_device_log_file_path)                             
+        if (p_device_log_file_path and sec_device_log_file_path):
+            del_conf, added_conf, p_log_cont, sec_log_cont = obj.get_difference(p_device_log_file_path, 
                                                                sec_device_log_file_path
                                                                )
-        # print('log1>>>>', p_log_cont)
-        # print('log2>>>>', sec_log_cont)
-        result_dict = {
-            'deleted_config': del_conf,
-            'added_config': added_conf,
-            'primary_log': p_log_cont,
-            'secondary_log': sec_log_cont,
-            'status': 'done',
-            'primary_ip' : primary_ip,
-            'secondary_ip' : sec_ip
+            # print('log1>>>>', p_log_cont)
+            # print('log2>>>>', sec_log_cont)
+            result_dict = {
+                'deleted_config': del_conf,
+                'added_config': added_conf,
+                'primary_log': p_log_cont,
+                'secondary_log': sec_log_cont,
+                'status': 'done',
+                'primary_ip' : primary_ip,
+                'secondary_ip' : sec_ip
 
-        }
+            }
+        else:
+            result_dict = {
+                'error':'Invalid ip or credetial details',
+                'status': 'failed',
+            }    
                    
     # time.sleep(5)
     return JsonResponse(result_dict)
@@ -170,20 +176,27 @@ def single_device_scaner_view(request):
         sec_device_log_file_path = obj.config_scanner(sec_device_type,
                                      sec_device_ip, sec_username, sec_password, 
                                      sec_secret, 'secondary_interface')
-
-        del_conf, added_conf, p_log_cont, sec_log_cont = obj.get_difference(p_device_log_file_path, 
-                                                               sec_device_log_file_path
+        print('sec device log path>>>>>>', sec_device_log_file_path)
+        if(p_device_log_file_path and sec_device_log_file_path):
+            del_conf, added_conf, p_log_cont, sec_log_cont = obj.get_difference(p_device_log_file_path, 
+                                                              sec_device_log_file_path
                                                                )
-        result_dict = {
-            'deleted_config': del_conf,
-            'added_config': added_conf,
-            'primary_log': p_log_cont,
-            'secondary_log': sec_log_cont,
-            'status': 'done',
-            'primary_ip' : prim_device_ip,
-            'secondary_ip' : sec_device_ip
-        }
-        return JsonResponse(result_dict)
+            result_dict = {
+                'deleted_config': del_conf,
+                'added_config': added_conf,
+                'primary_log': p_log_cont,
+                'secondary_log': sec_log_cont,
+                'status': 'done',
+                'primary_ip' : prim_device_ip,
+                'secondary_ip' : sec_device_ip
+            }
+            return JsonResponse(result_dict)
+        else:
+            result_dict = {
+                'status': 'failed'
+                }
+            return JsonResponse(result_dict)
+
 
     context = {
             'device_objs' : prim__device_qs,

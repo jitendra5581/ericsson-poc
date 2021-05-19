@@ -1,0 +1,3 @@
+,secondary_device_ip_address,device_type,user_name,password,secret,primary_device_ip_address,enable,upload_status,remarks
+0,2.2.2.2.84,cisco_ios,admin,cisco,cisco,1.1.1.1.84,True,success,
+1,2.2.2.2.85,cisco_iosss,admin,cisco,cisco,1.1.1.1.85,True,success,

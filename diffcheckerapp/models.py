@@ -2,7 +2,8 @@ from django.db import models
 
 
 class PrimaryInterface(models.Model):
-    ip_address = models.CharField(max_length=100)
+    # ip_address = models.CharField(max_length=100)
+    ip_address = models.GenericIPAddressField(unique=True)
     device_type = models.CharField(max_length=100)
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
@@ -18,7 +19,8 @@ class PrimaryInterface(models.Model):
 class SecondaryInterface(models.Model):
     primary_interface = models.OneToOneField(PrimaryInterface, 
                     on_delete=models.CASCADE, primary_key=True)
-    ip_address = models.CharField(max_length=100)                
+    # ip_address = models.CharField(max_length=100)  
+    ip_address = models.GenericIPAddressField(unique=True)              
     device_type = models.CharField(max_length=100)
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=50)

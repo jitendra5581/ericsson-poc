@@ -109,7 +109,7 @@ $.ajax(
    $('#scan-now').html('Scan Now'); 
 
    $('#ip1').html('Primary Device Logs<br>'+result['primary_ip']);
-   $('#ip2').html("Primary Device Logs<br>"+result['secondary_ip']);
+   $('#ip2').html("Secondary Device Logs<br>"+result['secondary_ip']);
 
    $.each(result['primary_log'], function(i, value){
        primary_p = primary_p + "<p>" + value + "</p>";
@@ -121,8 +121,8 @@ $.ajax(
     }); 
     $('#sec_log').html(sec_p);
     
-    var del_h = "<h4><b>Deleted Configurations </b></h4>";
-    var added_h = "<h4><b>Added Configurations</b></h4>";
+    var del_h = "<h4><b>Missing Configurations in Secondary Device </b></h4>";
+    var added_h = "<h4><b>Additional Configurations in Secondary Device</b></h4>";
     var del_p = '';
     var added_p = '';
     var final_report ='';
@@ -138,6 +138,11 @@ $.ajax(
     final_report = del_h + del_p + added_h + added_p;
     $('#col-report').html(final_report);
 
+   }
+   else
+   {
+    $('#scan-now').html('Scan Now');
+    alert('Connection Failed Invalid Device IP or credentials');
    }
     
    }

@@ -13,7 +13,7 @@ import datetime
 class DeviceConfigScanner:
 
     #************ getting logs ******************
-    
+    command = 'show run'
     def config_scanner(self, device_type, host, username, password, secret, interface_type):
         if(interface_type == 'primary_interface'):
             log_file_name = 'primary_'+host  
@@ -27,15 +27,21 @@ class DeviceConfigScanner:
             'host':   host,
             'username': username,
             'password': password,
-            "session_log": log_file_path,
+            # "session_log": log_file_path,
             'secret': secret ,
         }
-        net_connect = ConnectHandler(**cisco_881)
-        enable = net_connect.enable()
-        output = net_connect.send_command('show run interface f0/0')
-        print(output)
-        return log_file_path
-
+        try:
+            net_connect = ConnectHandler(**cisco_881)
+            enable = net_connect.enable()
+            output = net_connect.send_command(self.command)
+            # hostname = net_connect.find_prompt()[:-1]  
+            log_file_obj = open(log_file_path, 'w')
+            log_file_obj.write(output)
+            log_file_obj.close()
+            return log_file_path
+        except Exception as ex:
+            return None    
+    
     #******************comparing logs ************* 
 
     def get_difference(self, pri_log_file, sec_log_file):
@@ -54,7 +60,7 @@ class DeviceConfigScanner:
 
         return deleted_conf, added_conf, p_log_contents, sec_log_contents 
 
-    def gen_report(self, deleted_conf, added_conf):
-        log_file_name = 'primary_'+host  
-        log_file_path = os.path.join(settings.LOGS_URL, 'primary_logs/'+log_file_name)
+    # def gen_report(self, deleted_conf, added_conf):
+    #     log_file_name = 'primary_'+host  
+    #     log_file_path = os.path.join(settings.LOGS_URL, 'primary_logs/'+log_file_name)
         
