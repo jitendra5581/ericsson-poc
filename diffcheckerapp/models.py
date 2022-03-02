@@ -20,8 +20,8 @@ class SecondaryInterface(models.Model):
                     on_delete=models.CASCADE, primary_key=True)
     ip_address = models.CharField(max_length=100)                
     device_type = models.CharField(max_length=100)
-    username = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
+    username = models.CharField(max_length=50, blank=True, null=True)
+    password = models.CharField(max_length=50, blank=True, null=True)
     secret = models.CharField(max_length=50)
     enable_monitoring = models.BooleanField()
 
